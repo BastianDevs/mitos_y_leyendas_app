@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mitos_y_leyendas_app/config/router/app_router.dart';
+import 'package:mitos_y_leyendas_app/config/theme/app_theme.dart';
 
 void main() {
   runApp(const MainApp());
@@ -13,6 +14,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter,
+      theme: AppTheme().getTheme(),
     );
   }
 }
