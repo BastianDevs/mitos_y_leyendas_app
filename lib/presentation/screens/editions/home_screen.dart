@@ -17,12 +17,12 @@ class HomeScreen extends StatelessWidget {
       body: GridView.builder(
         itemCount: cantidad,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+          crossAxisCount: 1,
         ),
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(10),
-            child: Container(height: 50, width: 50, color: Colors.amber),
+            child: Container(height: 50, width: 30, color: Colors.amber),
           );
         },
       ),

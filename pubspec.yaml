@@ -1,6 +1,6 @@
 name: mitos_y_leyendas_app
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_riverpod: ^3.0.3
   go_router: ^17.0.0
 
 dev_dependencies:

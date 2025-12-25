@@ -3,12 +3,12 @@ import 'package:mitos_y_leyendas_app/domain/repositories/edition_repository.dart
 import 'package:mitos_y_leyendas_app/infrastructure/datasource/local_editions_datasouce.dart';
 
 class EditionRepositoryImpl implements EditionRepository {
-  final LocalEditionsDatasouce datasouce;
+  final LocalEditionsDatasource datasource;
 
-  EditionRepositoryImpl(this.datasouce);
+  EditionRepositoryImpl(this.datasource);
 
   @override
   List<EditionEntity> getEditions() {
-    return datasouce.getEditions();
+    return datasource.getEditions();
   }
 }

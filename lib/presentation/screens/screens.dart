@@ -1,1 +1,1 @@
-export 'cards/home_screen.dart';
+export 'editions/home_screen.dart';
