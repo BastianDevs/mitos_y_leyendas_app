@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mitos_y_leyendas_app/presentation/widgets/shared/custom_appbar.dart';
 
 class HomeScreen extends StatelessWidget {
   // Nombre de la ruta
@@ -10,10 +11,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const cantidad = 10;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('TCG - MYL Comunidad Camelot'),
-        backgroundColor: Colors.blue,
-      ),
+      appBar: CustomAppbar(title: "TCG - MYL: Ediciones Imperio"),
       body: GridView.builder(
         itemCount: cantidad,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -22,7 +20,7 @@ class HomeScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(10),
-            child: Container(height: 50, width: 30, color: Colors.amber),
+            child: Container(height: 50, width: 10, color: Colors.amber),
           );
         },
       ),
