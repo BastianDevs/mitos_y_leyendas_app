@@ -46,6 +46,5 @@ Reactivo
 */
 
 final editionProvider = Provider<List<EditionEntity>>((ref) {
-  final repository = ref.read(editionRepositoryProvider);
-  return repository.getEditions();
+  return ref.read(editionRepositoryProvider).getEditions();
 });
