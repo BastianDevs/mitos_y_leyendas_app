@@ -32,13 +32,14 @@ class EditionCard extends StatelessWidget {
     final imageUrl = 'https://api.myl.cl/static/${edition.slug}.png';
 
     return GestureDetector(
-      onTap: () => print("Click de prueba"),
+      onTap: () {},
       child: Card(
         margin: const EdgeInsets.only(bottom: 12),
         elevation: 8,
         shadowColor: Colors.black26,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         clipBehavior: Clip.antiAlias,
+        color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -77,7 +78,7 @@ class EditionCard extends StatelessWidget {
                   // Imagen por defecto
                   errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
-                      'assets/images/edition_placeholder.png',
+                      'assets/images/no_image.png',
                       fit: BoxFit.cover,
                     );
                   },
