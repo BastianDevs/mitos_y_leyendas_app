@@ -10,9 +10,12 @@ final appRouter = GoRouter(
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
-      path: '/cards',
+      path: '/cards/:editionSlug',
       name: CardsScreen.name,
-      builder: (context, state) => const CardsScreen(),
+      builder: (context, state) {
+        final slug = state.pathParameters['editionSlug']!;
+        return CardsScreen(editionSlug: slug);
+      },
     ),
   ],
 );

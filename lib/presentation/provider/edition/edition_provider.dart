@@ -48,3 +48,18 @@ Reactivo
 final editionProvider = Provider<List<EditionEntity>>((ref) {
   return ref.read(editionRepositoryProvider).getEditions();
 });
+
+final editionBySlugProvider = Provider.family<EditionEntity?, String>((
+  ref,
+  slug,
+) {
+  final editions = ref.watch(editionProvider);
+
+  for (final edition in editions) {
+    if (edition.slug == slug) {
+      return edition;
+    }
+  }
+
+  return null;
+});
