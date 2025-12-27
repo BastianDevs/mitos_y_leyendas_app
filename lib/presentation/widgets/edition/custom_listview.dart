@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mitos_y_leyendas_app/domain/entities/edition.dart';
 import 'package:mitos_y_leyendas_app/presentation/provider/edition/edition_provider.dart';
 
@@ -31,8 +32,10 @@ class EditionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final imageUrl = 'https://api.myl.cl/static/${edition.slug}.png';
 
-    return GestureDetector(
-      onTap: () {},
+    return InkWell(
+      onTap: () {
+        context.goNamed('cards-screen');
+      },
       child: Card(
         margin: const EdgeInsets.only(bottom: 12),
         elevation: 8,
