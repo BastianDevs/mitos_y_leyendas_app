@@ -13,6 +13,9 @@ class CardsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edition = ref.watch(editionBySlugProvider(editionSlug));
-    return Scaffold(appBar: CustomAppbar(title: edition?.title ?? 'Cartas'));
+    return Scaffold(
+      appBar: CustomAppbar(title: edition?.title ?? 'Cartas'),
+      drawer: context.widget,
+    );
   }
 }
