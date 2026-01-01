@@ -15,7 +15,7 @@ class CardsScreen extends ConsumerWidget {
     final edition = ref.watch(editionBySlugProvider(editionSlug));
     return Scaffold(
       appBar: CustomAppbar(title: edition?.title ?? 'Cartas'),
-      drawer: context.widget,
+      body: CustomGridview(),
     );
   }
 }
