@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mitos_y_leyendas_app/presentation/provider/card/card_provider.dart';
 import 'package:mitos_y_leyendas_app/presentation/provider/edition/edition_provider.dart';
 import 'package:mitos_y_leyendas_app/presentation/widgets/widgets.dart';
 
@@ -13,9 +14,17 @@ class CardsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edition = ref.watch(editionBySlugProvider(editionSlug));
+    final cardsAsync = ref.watch(cardsByEditionProvider(editionSlug));
+
     return Scaffold(
       appBar: CustomAppbar(title: edition?.title ?? 'Cartas'),
-      body: CustomGridview(),
+      body: cardsAsync.when(
+        data: (cards) {
+          return CustomGridview(cards: cards);
+        },
+        error: (error, _) => Center(child: Text(error.toString())),
+        loading: () => const Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }

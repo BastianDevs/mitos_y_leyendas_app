@@ -1,18 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:mitos_y_leyendas_app/domain/entities/card.dart';
 
 class CustomGridview extends StatelessWidget {
-  const CustomGridview({super.key});
+  final List<CardEntity> cards;
+
+  const CustomGridview({super.key, required this.cards});
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      padding: const EdgeInsets.all(8),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
+        childAspectRatio: 0.7,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
       ),
+      itemCount: cards.length,
       itemBuilder: (context, index) {
-        return Container(color: Colors.red, margin: EdgeInsets.all(10.0));
+        final card = cards[index];
+
+        return Card(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                card.name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text('Coste: ${card.cost}'),
+              Text('Daño: ${card.damage ?? '-'}'),
+              Text(card.rarity),
+            ],
+          ),
+        );
       },
-      itemCount: 10,
     );
   }
 }

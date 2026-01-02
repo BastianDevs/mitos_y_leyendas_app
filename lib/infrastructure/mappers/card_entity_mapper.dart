@@ -23,10 +23,12 @@ class CardEntityMapper {
   }
 
   static String _mapRarity(String id, Map<String, dynamic> root) {
-    final list = root['rarities'] as List;
+    final raw = root['rarities'];
 
-    for (final rarity in list) {
-      if (rarity['id'] == id) {
+    if (raw is! List) return 'Desconocida';
+
+    for (final rarity in raw) {
+      if (rarity is Map<String, dynamic> && rarity['id'] == id) {
         return rarity['name'];
       }
     }
@@ -35,10 +37,12 @@ class CardEntityMapper {
   }
 
   static String _mapRace(String id, Map<String, dynamic> root) {
-    final list = root['races'] as List;
+    final raw = root['races'];
 
-    for (final race in list) {
-      if (race['id'] == id) {
+    if (raw is! List) return 'Sin raza';
+
+    for (final race in raw) {
+      if (race is Map<String, dynamic> && race['id'] == id) {
         return race['name'];
       }
     }
@@ -47,10 +51,12 @@ class CardEntityMapper {
   }
 
   static String _mapType(String id, Map<String, dynamic> root) {
-    final list = root['types'] as List;
+    final raw = root['types'];
 
-    for (final type in list) {
-      if (type['id'] == id) {
+    if (raw is! List) return 'Desconocido';
+
+    for (final type in raw) {
+      if (type is Map<String, dynamic> && type['id'] == id) {
         return type['name'];
       }
     }
@@ -61,13 +67,17 @@ class CardEntityMapper {
   static List<String> _mapKeywords(dynamic flags, Map<String, dynamic> root) {
     if (flags == null) return [];
 
-    final int keywordFlags = int.parse(flags.toString());
-    final List keywords = root['keywords'];
+    final raw = root['keywords'];
+    if (raw is! List) return [];
+
+    final int keywordFlags = int.tryParse(flags.toString()) ?? 0;
 
     final List<String> result = [];
 
-    for (final keyword in keywords) {
-      final int flag = int.parse(keyword['flag']);
+    for (final keyword in raw) {
+      if (keyword is! Map<String, dynamic>) continue;
+
+      final int flag = int.tryParse(keyword['flag'].toString()) ?? 0;
       if ((keywordFlags & flag) != 0) {
         result.add(keyword['title']);
       }
