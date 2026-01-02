@@ -13,7 +13,7 @@ class CardsDatasourceImpl implements CardsDatasource {
 
   @override
   Future<List<CardEntity>> getCardsByEdition(String editionSlug) async {
-    final response = await dio.get('/cards/edition/${editionSlug}');
+    final response = await dio.get('/cards/edition/$editionSlug');
     final data = response.data;
 
     final List cardsJson = data['cards'];
