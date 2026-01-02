@@ -34,7 +34,7 @@ class EditionCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        context.goNamed(
+        context.pushNamed(
           'cards-screen',
           pathParameters: {'editionSlug': edition.slug},
         );

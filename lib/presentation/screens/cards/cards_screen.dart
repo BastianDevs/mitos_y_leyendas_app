@@ -20,6 +20,7 @@ class CardsScreen extends ConsumerWidget {
       appBar: CustomAppbar(title: edition?.title ?? 'Cartas'),
       body: cardsAsync.when(
         data: (cards) {
+          //return Text('UI recibe ${cards.length} cartas');
           return CustomGridview(cards: cards);
         },
         error: (error, _) => Center(child: Text(error.toString())),

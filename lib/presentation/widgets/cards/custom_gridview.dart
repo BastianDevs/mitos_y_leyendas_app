@@ -20,21 +20,35 @@ class CustomGridview extends StatelessWidget {
       itemBuilder: (context, index) {
         final card = cards[index];
 
-        return Card(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                card.name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            Image(
+              image: NetworkImage(
+                'https://api.myl.cl/static/cards/161/192.png',
               ),
-              const SizedBox(height: 8),
-              Text('Coste: ${card.cost}'),
-              Text('Daño: ${card.damage ?? '-'}'),
-              Text(card.rarity),
-            ],
-          ),
+            ),
+            Card(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    card.name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('Coste: ${card.cost}'),
+                  Text('Daño: ${card.damage ?? '-'}'),
+                  Text(card.rarity),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );

@@ -6,30 +6,44 @@ class CardEntityMapper {
     Map<String, dynamic> rootData,
   ) {
     return CardEntity(
-      id: json['id'],
-      slug: json['slug'] as String,
-      name: json['name'] as String,
+      id: int.tryParse(json['id']?.toString() ?? '') ?? 0,
 
-      cost: int.parse(json['cost']),
-      damage: json['damage'] != null ? int.parse(json['damage']) : null,
-      ability: json['ability'] as String?,
+      cost: int.tryParse(json['cost']?.toString() ?? '') ?? 0,
 
-      rarity: _mapRarity(json['rarity'], rootData),
-      race: _mapRace(json['race'], rootData),
-      type: _mapType(json['type'], rootData),
+      slug: json['slug']?.toString() ?? '',
+      name: json['name']?.toString() ?? 'Sin nombre',
+
+      damage:
+          json['damage'] != null ? int.parse(json['damage'].toString()) : null,
+
+      ability: json['ability']?.toString(),
+
+      rarity: _mapRarity(json['rarity']?.toString() ?? '', rootData),
+      race: _mapRace(json['race']?.toString() ?? '', rootData),
+      type: _mapType(json['type']?.toString() ?? '', rootData),
+
       keywords: _mapKeywords(json['keywords'], rootData),
-      editionSlug: json['ed_slug'],
+
+      editionSlug: json['ed_slug']?.toString() ?? '',
     );
   }
 
   static String _mapRarity(String id, Map<String, dynamic> root) {
     final raw = root['rarities'];
 
-    if (raw is! List) return 'Desconocida';
+    Iterable values;
 
-    for (final rarity in raw) {
-      if (rarity is Map<String, dynamic> && rarity['id'] == id) {
-        return rarity['name'];
+    if (raw is List) {
+      values = raw;
+    } else if (raw is Map) {
+      values = raw.values;
+    } else {
+      return 'Desconocida';
+    }
+
+    for (final rarity in values) {
+      if (rarity is Map && rarity['id'].toString() == id) {
+        return rarity['name'].toString();
       }
     }
 
@@ -39,11 +53,19 @@ class CardEntityMapper {
   static String _mapRace(String id, Map<String, dynamic> root) {
     final raw = root['races'];
 
-    if (raw is! List) return 'Sin raza';
+    Iterable values;
 
-    for (final race in raw) {
-      if (race is Map<String, dynamic> && race['id'] == id) {
-        return race['name'];
+    if (raw is List) {
+      values = raw;
+    } else if (raw is Map) {
+      values = raw.values;
+    } else {
+      return 'Sin raza';
+    }
+
+    for (final race in values) {
+      if (race is Map && race['id'].toString() == id) {
+        return race['name'].toString();
       }
     }
 
@@ -53,11 +75,19 @@ class CardEntityMapper {
   static String _mapType(String id, Map<String, dynamic> root) {
     final raw = root['types'];
 
-    if (raw is! List) return 'Desconocido';
+    Iterable values;
 
-    for (final type in raw) {
-      if (type is Map<String, dynamic> && type['id'] == id) {
-        return type['name'];
+    if (raw is List) {
+      values = raw;
+    } else if (raw is Map) {
+      values = raw.values;
+    } else {
+      return 'Desconocido';
+    }
+
+    for (final type in values) {
+      if (type is Map && type['id'].toString() == id) {
+        return type['name'].toString();
       }
     }
 
@@ -68,18 +98,26 @@ class CardEntityMapper {
     if (flags == null) return [];
 
     final raw = root['keywords'];
-    if (raw is! List) return [];
-
     final int keywordFlags = int.tryParse(flags.toString()) ?? 0;
 
     final List<String> result = [];
 
-    for (final keyword in raw) {
-      if (keyword is! Map<String, dynamic>) continue;
+    Iterable values;
+
+    if (raw is List) {
+      values = raw;
+    } else if (raw is Map<String, dynamic>) {
+      values = raw.values;
+    } else {
+      return [];
+    }
+
+    for (final keyword in values) {
+      if (keyword is! Map) continue;
 
       final int flag = int.tryParse(keyword['flag'].toString()) ?? 0;
       if ((keywordFlags & flag) != 0) {
-        result.add(keyword['title']);
+        result.add(keyword['title'].toString());
       }
     }
 
