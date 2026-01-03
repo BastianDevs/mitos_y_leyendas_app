@@ -7,7 +7,7 @@ class CardEntityMapper {
   ) {
     return CardEntity(
       id: int.tryParse(json['id']?.toString() ?? '') ?? 0,
-
+      edid: json['edid'],
       cost: int.tryParse(json['cost']?.toString() ?? '') ?? 0,
 
       slug: json['slug']?.toString() ?? '',
@@ -23,7 +23,7 @@ class CardEntityMapper {
       type: _mapType(json['type']?.toString() ?? '', rootData),
 
       keywords: _mapKeywords(json['keywords'], rootData),
-
+      edEdid: json['ed_edid'],
       editionSlug: json['ed_slug']?.toString() ?? '',
     );
   }

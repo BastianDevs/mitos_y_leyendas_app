@@ -25,7 +25,7 @@ class CustomGridview extends StatelessWidget {
           children: [
             Image(
               image: NetworkImage(
-                'https://api.myl.cl/static/cards/161/192.png',
+                'https://api.myl.cl/static/cards/${card.edEdid}/${card.edid}.png',
               ),
             ),
             Card(

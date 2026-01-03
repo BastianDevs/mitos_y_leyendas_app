@@ -1,5 +1,6 @@
 class CardEntity {
   final int id;
+  final String edid;
   final String slug;
   final String name;
 
@@ -12,10 +13,12 @@ class CardEntity {
   final int? damage;
   final String? ability;
 
+  final String edEdid;
   final String editionSlug;
 
   CardEntity({
     required this.id,
+    required this.edid,
     required this.slug,
     required this.name,
     required this.rarity,
@@ -25,6 +28,7 @@ class CardEntity {
     required this.cost,
     required this.damage,
     required this.ability,
+    required this.edEdid,
     required this.editionSlug,
   });
 }
