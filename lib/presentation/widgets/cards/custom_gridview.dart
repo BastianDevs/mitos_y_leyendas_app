@@ -1,5 +1,5 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mitos_y_leyendas_app/domain/entities/card.dart';
 
 class CustomGridview extends StatelessWidget {
@@ -20,9 +20,19 @@ class CustomGridview extends StatelessWidget {
       itemCount: cards.length,
       itemBuilder: (context, index) {
         final card = cards[index];
-
         return InkWell(
-          onTap: () => context.pushNamed('card-detail'),
+          onTap: () {
+            showGeneralDialog(
+              context: context,
+              barrierDismissible: true,
+              barrierLabel: 'card-detail',
+              barrierColor: Colors.black.withValues(alpha: 0.3),
+              transitionDuration: const Duration(milliseconds: 300),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return _CardDetailDialog(card: card);
+              },
+            );
+          },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Stack(
@@ -115,6 +125,66 @@ class _CardNameOverlay extends StatelessWidget {
             shadows: [Shadow(blurRadius: 4, color: Colors.black)],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _CardDetailDialog extends StatelessWidget {
+  final CardEntity card;
+
+  const _CardDetailDialog({required this.card});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          /// BLUR BACKGROUND
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+            child: Container(color: Colors.black.withValues(alpha: 0.2)),
+          ),
+
+          /// CARD CONTENT
+          Center(
+            child: Hero(
+              tag: card.slug,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      /// IMAGE
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                        child: _CardImage(card: card),
+                      ),
+
+                      /// DETAILS
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          card.name,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
