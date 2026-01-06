@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mitos_y_leyendas_app/domain/entities/card.dart';
 
 class CustomGridview extends StatelessWidget {
@@ -20,17 +21,20 @@ class CustomGridview extends StatelessWidget {
       itemBuilder: (context, index) {
         final card = cards[index];
 
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              /// IMAGEN CON FADE + PLACEHOLDER
-              _CardImage(card: card),
+        return InkWell(
+          onTap: () => context.pushNamed('card-detail'),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                /// IMAGEN CON FADE + PLACEHOLDER
+                _CardImage(card: card),
 
-              /// OVERLAY GRADIENTE + NOMBRE
-              _CardNameOverlay(name: card.name),
-            ],
+                /// OVERLAY GRADIENTE + NOMBRE
+                _CardNameOverlay(name: card.name),
+              ],
+            ),
           ),
         );
       },
@@ -76,7 +80,7 @@ class _ImageSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black12,
-      child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+      child: const Center(child: CircularProgressIndicator(strokeWidth: 4)),
     );
   }
 }

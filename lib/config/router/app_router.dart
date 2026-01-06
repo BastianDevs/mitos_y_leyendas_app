@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:mitos_y_leyendas_app/presentation/screens/cards/card_detail.dart';
 import 'package:mitos_y_leyendas_app/presentation/screens/cards/cards_screen.dart';
 import 'package:mitos_y_leyendas_app/presentation/screens/screens.dart';
 
@@ -16,6 +17,11 @@ final appRouter = GoRouter(
         final slug = state.pathParameters['editionSlug']!;
         return CardsScreen(editionSlug: slug);
       },
+    ),
+    GoRoute(
+      path: '/card/detail',
+      name: CardDetail.name,
+      builder: (context, state) => const CardDetail(),
     ),
   ],
 );
