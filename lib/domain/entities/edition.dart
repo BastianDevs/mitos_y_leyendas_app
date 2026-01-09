@@ -1,3 +1,4 @@
+/// Entidad de dominio que representa una edición del juego.
 class EditionEntity {
   final int id;
   final String slug;

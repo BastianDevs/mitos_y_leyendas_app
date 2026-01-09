@@ -1,6 +1,16 @@
 import 'package:mitos_y_leyendas_app/domain/entities/edition.dart';
 
+/// Datasource local de ediciones
+///
+/// - Proporciona un listado estático de ediciones
+/// - No depende de red ni servicios externos
+/// - Ideal para pruebas, prototipos o datos iniciales
 class LocalEditionsDatasource {
+  /// Obtiene la lista de ediciones disponibles
+  ///
+  /// - Retorna entidades de dominio (`EditionEntity`)
+  /// - Es una operación síncrona
+  /// - Puede ser reemplazada fácilmente por un datasource remoto
   List<EditionEntity> getEditions() {
     return [
       EditionEntity(
