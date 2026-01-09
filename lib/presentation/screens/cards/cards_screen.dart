@@ -36,22 +36,29 @@ class CardsScreen extends ConsumerWidget {
       appBar: CustomAppbar(title: edition?.title ?? 'Cartas'),
 
       /// Cuerpo de la pantalla controlado por el estado asíncrono
-      body: cardsAsync.when(
-        /// Estado exitoso: se reciben las cartas
-        data: (cards) {
-          /// Renderiza el grid de cartas
-          return CustomGridview(cards: cards);
-        },
+      body: Column(
+        children: [
+          CustomSearchAnchor(),
+          Expanded(
+            child: cardsAsync.when(
+              /// Estado exitoso: se reciben las cartas
+              data: (cards) {
+                /// Renderiza el grid de cartas
+                return CustomGridview(cards: cards);
+              },
 
-        /// Estado de error: muestra el mensaje de error
-        error: (error, _) {
-          return Center(child: Text(error.toString()));
-        },
+              /// Estado de error: muestra el mensaje de error
+              error: (error, _) {
+                return Center(child: Text(error.toString()));
+              },
 
-        /// Estado de carga: indicador visual mientras se obtienen los datos
-        loading: () {
-          return const Center(child: CircularProgressIndicator());
-        },
+              /// Estado de carga: indicador visual mientras se obtienen los datos
+              loading: () {
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
