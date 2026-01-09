@@ -82,7 +82,7 @@ class _ImagePlaceholder extends StatelessWidget {
     return ClipRRect(
       /// Recorta el widget hijo según el [borderRadius] recibido.
       /// Si es null, se usa BorderRadius.zero (sin recorte).
-      borderRadius: borderRadius ?? BorderRadius.zero,
+      borderRadius: borderRadius,
 
       /// Shimmer.fromColors crea una animación de brillo
       /// que se desplaza sobre el widget hijo.
