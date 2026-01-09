@@ -41,7 +41,9 @@ class CardImage extends StatelessWidget {
       loadingBuilder: (context, child, loadingProgress) {
         /// Si aún hay progreso de carga, mostramos un shimmer
         if (loadingProgress != null) {
-          return const _ImageShimmer();
+          return const _ImagePlaceholder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          );
         }
 
         /// Cuando termina de cargar, se muestra la imagen real
@@ -56,25 +58,45 @@ class CardImage extends StatelessWidget {
   }
 }
 
-/// Placeholder animado tipo *shimmer* que se muestra mientras la imagen
-/// se está descargando desde la red.
+/// Widget de placeholder animado para imágenes que aún no han terminado de cargar.
 ///
-/// Mejora la percepción de rendimiento y evita mostrar espacios vacíos
-/// o loaders abruptos mientras el contenido visual aún no está disponible.
-class _ImageShimmer extends StatelessWidget {
-  const _ImageShimmer();
+/// - Simula visualmente el espacio que ocupará la imagen final
+/// - Evita saltos de layout mientras se descarga la imagen
+/// - Mejora la percepción de rendimiento usando una animación tipo shimmer
+/// - No requiere una imagen real (asset o network)
+class _ImagePlaceholder extends StatelessWidget {
+  /// Permite aplicar bordes redondeados al placeholder.
+  ///
+  /// Se usa para que el placeholder respete la misma forma
+  /// que tendrá la imagen final (por ejemplo, cards con esquinas redondeadas).
+  final BorderRadius borderRadius;
+
+  /// Constructor del placeholder.
+  ///
+  /// [borderRadius] es requerido;
+  /// el widget se renderiza sin bordes redondeados.
+  const _ImagePlaceholder({required this.borderRadius});
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      /// Color base del shimmer (estado "apagado")
-      baseColor: Colors.grey.shade300,
+    return ClipRRect(
+      /// Recorta el widget hijo según el [borderRadius] recibido.
+      /// Si es null, se usa BorderRadius.zero (sin recorte).
+      borderRadius: borderRadius ?? BorderRadius.zero,
 
-      /// Color de brillo que recorre el placeholder
-      highlightColor: Colors.grey.shade100,
+      /// Shimmer.fromColors crea una animación de brillo
+      /// que se desplaza sobre el widget hijo.
+      child: Shimmer.fromColors(
+        /// Color base del efecto shimmer (zona más oscura).
+        baseColor: Colors.grey.shade300,
 
-      /// Contenedor que simula el espacio final de la imagen
-      child: Container(color: Colors.grey),
+        /// Color del brillo animado (zona más clara).
+        highlightColor: Colors.grey.shade100,
+
+        /// Contenedor que simula el área de la imagen final.
+        /// Su tamaño será definido por el widget padre.
+        child: Container(color: Colors.grey),
+      ),
     );
   }
 }
