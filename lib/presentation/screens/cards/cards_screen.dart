@@ -38,7 +38,9 @@ class CardsScreen extends ConsumerWidget {
       /// Cuerpo de la pantalla controlado por el estado asíncrono
       body: Column(
         children: [
+          SizedBox(height: 8),
           CustomSearchAnchor(),
+          SizedBox(height: 5),
           Expanded(
             child: cardsAsync.when(
               /// Estado exitoso: se reciben las cartas
