@@ -39,7 +39,7 @@ class CardsScreen extends ConsumerWidget {
       body: Column(
         children: [
           SizedBox(height: 8),
-          CustomSearchAnchor(),
+          CustomSearchAnchor(editionSlug),
           SizedBox(height: 5),
           Expanded(
             child: cardsAsync.when(
