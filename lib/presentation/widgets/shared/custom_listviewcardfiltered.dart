@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mitos_y_leyendas_app/domain/entities/card.dart';
+import 'package:mitos_y_leyendas_app/presentation/widgets/widgets.dart';
 
 class CustomListviewCardFiltered extends StatelessWidget {
-  /// Nombre de la carta
-  final String name;
+  /// Carta que se mostrará en la sugerencia
+  ///
+  /// Se pasa completa para:
+  /// - Evitar duplicar datos
+  /// - Facilitar navegación y dialogs
+  /// - Mantener el widget simple
+  final CardEntity card;
 
-  /// URL de la imagen de la carta
-  final String imageUrl;
-
-  const CustomListviewCardFiltered({
-    super.key,
-    required this.name,
-    required this.imageUrl,
-  });
+  const CustomListviewCardFiltered({super.key, required this.card});
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +19,25 @@ class CustomListviewCardFiltered extends StatelessWidget {
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(6),
         child: Image.network(
-          imageUrl,
+          'https://api.myl.cl/static/cards/${card.edEdid}/${card.edid}.png',
           width: 40,
           height: 40,
           fit: BoxFit.cover,
         ),
       ),
-      title: Text(name.toUpperCase()),
+
+      /// Nombre de la carta
+      title: Text(card.name.toUpperCase()),
+
       onTap: () {
-        /// Aquí luego puedes:
-        /// - cerrar el search
-        /// - navegar al detalle
+        /// Muestra el dialog con el detalle de la carta
+        ///
+        /// Flujo:
+        /// Tap →
+        /// Dialog overlay →
+        /// Hero animation →
+        /// Detalle completo
+        CustomShowCardDialog.show(context, card);
       },
     );
   }

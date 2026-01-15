@@ -145,11 +145,7 @@ class _CustomSearchAnchorState extends ConsumerState<CustomSearchAnchor> {
 
               /// Limita la cantidad de sugerencias visibles
               return cards.take(10).map((card) {
-                return CustomListviewCardFiltered(
-                  name: card.name,
-                  imageUrl:
-                      'https://api.myl.cl/static/cards/${card.edEdid}/${card.edid}.png',
-                );
+                return CustomListviewCardFiltered(card: card);
               }).toList();
             },
           );
