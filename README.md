@@ -2,10 +2,23 @@
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.x-blue)
 ![Riverpod](https://img.shields.io/badge/Riverpod-State%20Management-green)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-Aplicación móvil desarrollada en Flutter para explorar cartas del juego
-_Mitos y Leyendas_, del formato _Imperio_, permitiendo búsqueda, filtrado por edición y
-visualización detallada de cada carta.
+Aplicación móvil desarrollada en **Flutter** para explorar cartas del juego  
+**Mitos y Leyendas**, formato **Imperio**.
+
+Permite búsqueda en tiempo real, filtrado por edición y visualización
+detallada de cada carta con animaciones.
+
+## 🎯 Objetivo del proyecto
+
+Este proyecto tiene fines educativos y de portafolio, enfocado en:
+
+- Aplicar Clean Architecture en Flutter
+- Gestión de estado avanzada con Riverpod
+- Buenas prácticas de UI y UX
+
+---
 
 ## ✨ Características
 
@@ -13,6 +26,21 @@ visualización detallada de cada carta.
 - 🃏 Filtrado por edición
 - 📄 Vista detallada de cada carta
 - 🎞 Animaciones con Hero
+- ⚡ Estado reactivo con Riverpod
+
+---
+
+## 📸 Capturas
+
+### Búsqueda de cartas
+
+![Search](screenshots/search.jpg)
+
+### Detalle de carta
+
+![Detail](screenshots/detail.jpg)
+
+---
 
 ## 🛠 Tecnologías
 
@@ -22,16 +50,25 @@ visualización detallada de cada carta.
 - Clean Architecture
 - Material 3
 
+---
+
 ## 🧱 Arquitectura
 
-El proyecto sigue una arquitectura limpia, separando responsabilidades
-en capas:
+El proyecto sigue **Clean Architecture**, separando responsabilidades
+en capas bien definidas:
 
-- **Presentation**: Widgets, UI y providers
-- **Domain**: Entidades y repositorios abstractos
-- **Infrastructure / Data**: Datasources, repositorios y servicios HTTP
+- **Presentation**  
+  Widgets, UI y providers (Riverpod)
 
-El estado se gestiona exclusivamente con **Riverpod**.
+- **Domain**  
+  Entidades y contratos de repositorio
+
+- **Infrastructure / Data**  
+  Datasources, implementaciones de repositorios y servicios HTTP
+
+👉 El estado se gestiona **exclusivamente con Riverpod**.
+
+---
 
 ## 🚀 Instalación
 
@@ -54,19 +91,6 @@ El estado se gestiona exclusivamente con **Riverpod**.
    ```
 
 ---
-
-### 7️⃣ Capturas de pantalla (opcional pero MUY recomendable)
-
-```md
-## 📸 Capturas
-
-### Búsqueda de cartas
-
-![Search](screenshots/search.jpg)
-
-### Detalle de carta
-
-![Detail](screenshots/detail.jpg)
 
 ## 🚧 Estado del proyecto
 
@@ -103,4 +127,8 @@ Nuevas funcionalidades y mejoras están en progreso.
 
 Este proyecto está bajo la licencia MIT.  
 Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+```
+---
+
 ```
