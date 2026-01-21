@@ -13,7 +13,6 @@ visualización detallada de cada carta.
 - 🃏 Filtrado por edición
 - 📄 Vista detallada de cada carta
 - 🎞 Animaciones con Hero
-- 🌙 Soporte para tema claro / oscuro
 
 ## 🛠 Tecnologías
 
@@ -40,29 +39,34 @@ El estado se gestiona exclusivamente con **Riverpod**.
 
    ```bash
    git clone https://github.com/BastianDevs/mitos_y_leyendas_app.git
-
    ```
 
 2. Instala dependencias:
 
-flutter pub get
+   ```bash
+   flutter pub get
+   ```
 
 3. Ejecuta la app
 
-flutter run
+   ```bash
+   flutter run
+   ```
 
 ---
 
 ### 7️⃣ Capturas de pantalla (opcional pero MUY recomendable)
 
-Esto hace que el proyecto se vea **10x más profesional**.
-
 ```md
 ## 📸 Capturas
 
-![Home](screenshots/home.png)
-![Search](screenshots/search.png)
-![Detail](screenshots/detail.png)
+### Búsqueda de cartas
+
+![Search](screenshots/search.jpg)
+
+### Detalle de carta
+
+![Detail](screenshots/detail.jpg)
 
 ## 🚧 Estado del proyecto
 
@@ -71,14 +75,32 @@ Nuevas funcionalidades y mejoras están en progreso.
 
 ✅ Versión funcional con mejoras planificadas
 
-## 🗺 Roadmap
+## 🗺️ Roadmap
 
-- [ ] Filtros avanzados
-- [ ] Favoritos
-- [ ] Cache local
-- [ ] Tests unitarios
+### ✅ Completado
+
+- [x] Arquitectura limpia con Riverpod
+- [x] Listado de cartas por edición
+- [x] Búsqueda de cartas con SearchAnchor
+- [x] Filtro reactivo mediante providers
+- [x] Vista de detalle de carta con dialog animado
+
+### 🚧 En progreso
+
+- [ ] Optimización de carga de imágenes
+- [ ] Manejo de estados de error y empty states
+- [ ] Animaciones Hero mejoradas
+
+### 🔜 Planificado
+
+- [ ] Favoritos de cartas
+- [ ] Filtros avanzados (tipo, coste, rareza)
+- [ ] Cache local (offline)
+- [ ] Tests unitarios de providers
+- [ ] Modo oscuro completo
 
 ## 📄 Licencia
 
-Este proyecto se distribuye bajo la licencia MIT.
+Este proyecto está bajo la licencia MIT.  
+Consulta el archivo [LICENSE](LICENSE) para más detalles.
 ```
