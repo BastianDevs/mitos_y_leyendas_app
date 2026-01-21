@@ -34,11 +34,15 @@ Este proyecto tiene fines educativos y de portafolio, enfocado en:
 
 ### Búsqueda de cartas
 
-![Search](screenshots/search.jpeg)
+<p align="center">
+  <img src="screenshots/search.jpeg" width="280" />
+</p>
 
 ### Detalle de carta
 
-![Detail](screenshots/detail.jpeg)
+<p align="center">
+  <img src="screenshots/detail.jpeg" width="280" />
+</p>
 
 ---
 
