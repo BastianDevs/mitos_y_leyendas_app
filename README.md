@@ -34,11 +34,11 @@ Este proyecto tiene fines educativos y de portafolio, enfocado en:
 
 ### Búsqueda de cartas
 
-![Search](screenshots/search.jpg)
+![Search](screenshots/search.jpeg)
 
 ### Detalle de carta
 
-![Detail](screenshots/detail.jpg)
+![Detail](screenshots/detail.jpeg)
 
 ---
 
@@ -127,8 +127,3 @@ Nuevas funcionalidades y mejoras están en progreso.
 
 Este proyecto está bajo la licencia MIT.  
 Consulta el archivo [LICENSE](LICENSE) para más detalles.
-
-```
----
-
-```
