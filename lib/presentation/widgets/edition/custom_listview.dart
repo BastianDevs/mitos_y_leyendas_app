@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mitos_y_leyendas_app/domain/entities/edition.dart';
 import 'package:mitos_y_leyendas_app/presentation/provider/edition/edition_provider.dart';
+import 'package:mitos_y_leyendas_app/presentation/widgets/widgets.dart';
 
 /// Listado de ediciones.
 ///
@@ -29,7 +30,12 @@ class EditionListView extends ConsumerWidget {
       /// Renderiza solo los elementos visibles (mejor performance)
       itemBuilder: (context, index) {
         final edition = editions[index];
-        return EditionCard(edition: edition);
+
+        /// Animación de las card de edition
+        return AnimatedEditionCard(
+          index: index,
+          child: EditionCard(edition: edition),
+        );
       },
     );
   }

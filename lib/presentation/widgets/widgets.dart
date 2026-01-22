@@ -5,3 +5,4 @@ export 'cards/custom_showgeneraldialog.dart';
 export 'cards/custom_cardimage.dart';
 export 'shared/custom_searchanchor.dart';
 export 'shared/custom_listviewcardfiltered.dart';
+export 'edition/custom_animated_edition_card.dart';
