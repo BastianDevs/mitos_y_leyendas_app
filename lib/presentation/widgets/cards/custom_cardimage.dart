@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mitos_y_leyendas_app/domain/entities/card.dart';
 import 'package:shimmer/shimmer.dart';
@@ -12,48 +13,45 @@ class CardImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      /// URL dinámica de la imagen según la edición y el id de la carta
-      'https://api.myl.cl/static/cards/${card.edEdid}/${card.edid}.png',
+    return CachedNetworkImage(
+      /// URL de la imagen construida dinámicamente según la edición
+      /// y el identificador único de la carta en la API de MyL.
+      /// Formato: /static/cards/{edición}/{id}.png
+      imageUrl:
+          'https://api.myl.cl/static/cards/${card.edEdid}/${card.edid}.png',
 
-      /// Ajusta la imagen para cubrir completamente el contenedor
+      /// Ajusta la imagen para cubrir completamente el contenedor,
+      /// recortando los bordes si es necesario.
       fit: BoxFit.cover,
 
-      /// Se ejecuta cuando el frame de la imagen cambia
-      /// Permite animar la aparición cuando la imagen termina de cargar
-      frameBuilder: (context, child, frame, _) {
-        return AnimatedOpacity(
-          /// Si el frame es null, la imagen aún no está cargada
-          opacity: frame == null ? 0 : 1,
-
-          /// Duración de la animación de aparición
-          duration: const Duration(milliseconds: 400),
-
-          /// Curva suave para el fade-in
-          curve: Curves.easeOut,
-
-          /// Imagen renderizada
-          child: child,
-        );
-      },
-
-      /// Se ejecuta mientras la imagen se está descargando
-      loadingBuilder: (context, child, loadingProgress) {
-        /// Si aún hay progreso de carga, mostramos un shimmer
-        if (loadingProgress != null) {
-          return const _ImagePlaceholder(
+      /// Mientras la imagen se descarga desde la red,
+      /// muestra un placeholder animado tipo shimmer para
+      /// mantener el layout y mejorar la percepción de velocidad.
+      placeholder:
+          (context, url) => const _ImagePlaceholder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          );
-        }
+          ),
 
-        /// Cuando termina de cargar, se muestra la imagen real
-        return child;
-      },
+      /// Si la imagen no puede cargarse (URL inválida, sin conexión, etc.),
+      /// muestra un ícono de imagen rota como fallback visual.
+      errorWidget:
+          (context, url, error) =>
+              const Center(child: Icon(Icons.broken_image, size: 40)),
 
-      /// Se ejecuta si ocurre un error al cargar la imagen
-      errorBuilder: (_, __, ___) {
-        return const Center(child: Icon(Icons.broken_image, size: 40));
-      },
+      /// Duración del fade-in al mostrar la imagen una vez descargada.
+      /// Solo aplica cuando la imagen viene de la red; si ya está en
+      /// caché local, aparece instantáneamente sin animación innecesaria.
+      fadeInDuration: const Duration(milliseconds: 400),
+
+      /// Curva de la animación de aparición.
+      /// easeOut produce una transición suave que desacelera al final.
+      fadeInCurve: Curves.easeOut,
+
+      /// Limita el ancho de la imagen almacenada en memoria RAM.
+      /// Evita guardar imágenes a resolución completa cuando se muestran
+      /// en un grid de 2 columnas (~400px de ancho máximo por carta).
+      /// Ajustar si el layout cambia a más o menos columnas.
+      memCacheWidth: 400,
     );
   }
 }
