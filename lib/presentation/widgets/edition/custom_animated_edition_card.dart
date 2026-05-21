@@ -54,25 +54,31 @@ class _AnimatedEditionCardState extends State<AnimatedEditionCard>
 
     /// Define la curva de animación.
     ///
-    /// Curves.easeOutCubic genera un efecto moderno:
-    /// rápido al inicio y suave al final.
+    /// Curves.easeOutExpo genera un efecto moderno:
+    /// muy rápido al inicio y extremadamente suave al final,
+    /// dando una sensación de ligereza a la entrada de cada tarjeta.
     _animation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeOutExpo,
     );
 
     /// Calcula un delay progresivo según la posición del elemento en la lista.
+    /// Se limita al índice 5 para que en listas largas la animación
+    /// no se sienta excesivamente lenta — todos los elementos
+    /// posteriores al quinto comparten el mismo delay máximo de 500ms.
     ///
     /// Ejemplo:
     /// - index 0 → 0 ms
     /// - index 1 → 100 ms
     /// - index 2 → 200 ms
-    final delay = Duration(milliseconds: 100 * widget.index);
+    /// - index 5+ → 500 ms (tope máximo)
+    final delay = Duration(milliseconds: 100 * widget.index.clamp(0, 5));
 
-    /// Ejecuta la animación después del delay.
+    /// Ejecuta la animación después del delay calculado.
     ///
-    /// Se verifica `mounted` para evitar errores si el widget fue destruido
-    /// antes de que termine el Future.
+    /// Se verifica [mounted] para evitar llamar a [_controller.forward]
+    /// si el widget fue destruido antes de que termine el Future,
+    /// lo que causaría una excepción en tiempo de ejecución.
     Future.delayed(delay, () {
       if (mounted) {
         _controller.forward();
@@ -83,7 +89,6 @@ class _AnimatedEditionCardState extends State<AnimatedEditionCard>
   @override
   void dispose() {
     /// Libera los recursos del controlador de animación.
-    ///
     /// Es obligatorio para evitar memory leaks.
     _controller.dispose();
     super.dispose();
@@ -92,20 +97,21 @@ class _AnimatedEditionCardState extends State<AnimatedEditionCard>
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
-      /// Animación de opacidad (fade-in)
+      /// Animación de opacidad: la tarjeta aparece gradualmente desde
+      /// transparente hasta completamente visible.
       opacity: _animation,
 
       child: SlideTransition(
-        /// Animación de desplazamiento vertical (slide-up)
+        /// Animación de desplazamiento vertical: la tarjeta sube
+        /// ligeramente desde su posición inicial hasta su lugar final.
         ///
-        /// begin: posición inicial desplazada hacia abajo.
-        /// end: posición final normal.
+        /// begin: desplazada un 20% hacia abajo de su posición final.
+        /// end: posición natural en el layout (sin desplazamiento).
         position: Tween<Offset>(
-          begin: const Offset(0, 0.2), // desde abajo
+          begin: const Offset(0.1, 0), // desde la derecha, sutil
           end: Offset.zero,
         ).animate(_animation),
 
-        /// Widget hijo que recibe la animación
         child: widget.child,
       ),
     );
