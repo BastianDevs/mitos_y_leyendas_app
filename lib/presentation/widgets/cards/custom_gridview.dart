@@ -4,9 +4,13 @@ import 'package:mitos_y_leyendas_app/presentation/widgets/widgets.dart';
 import 'package:shimmer/shimmer.dart';
 
 /// Grid personalizado que muestra una colección de cartas.
-/// Cada ítem es interactivo y abre el detalle en un dialog.
+///
+/// Cada carta es interactiva y al tocarla abre [CustomShowCardDialog]
+/// con una animación Hero que conecta visualmente la carta del grid
+/// con su versión ampliada en el dialog.
 class CustomGridview extends StatelessWidget {
-  /// Lista de cartas a renderizar en el grid
+  /// Lista de cartas a renderizar en el grid.
+  /// Si está vacía, el widget padre debe manejar el empty state.
   final List<CardEntity> cards;
 
   const CustomGridview({super.key, required this.cards});
@@ -14,52 +18,60 @@ class CustomGridview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      /// Espaciado externo del grid
       padding: const EdgeInsets.all(8),
 
-      /// Configuración del layout del grid
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        // Número de columnas
+        /// Número de columnas del grid
         crossAxisCount: 2,
 
-        // Relación ancho / alto de cada item
+        /// Relación ancho/alto de cada celda.
+        /// El valor 0.7 replica las proporciones reales de una carta de MyL.
+        /// Debe coincidir con el [AspectRatio] usado en [_CardContainer]
+        /// para que la animación Hero no deforme la imagen durante el vuelo.
         childAspectRatio: 0.7,
 
-        // Espaciado horizontal entre items
+        /// Espaciado horizontal entre celdas
         crossAxisSpacing: 8,
 
-        // Espaciado vertical entre items
+        /// Espaciado vertical entre celdas
         mainAxisSpacing: 8,
       ),
 
-      /// Cantidad total de items
       itemCount: cards.length,
 
-      /// Builder de cada item del grid
       itemBuilder: (context, index) {
-        // Carta actual
         final card = cards[index];
 
-        return InkWell(
-          /// Acción al tocar una carta
-          onTap: () => CustomShowCardDialog.show(context, card),
+        /// [Hero] marca esta carta como el origen de la animación.
+        /// Flutter busca un [Hero] con el mismo [tag] en la pantalla
+        /// destino ([CustomShowCardDialog]) y anima la transición entre ambos.
+        /// [card.slug] garantiza unicidad entre todas las cartas del grid.
+        return Hero(
+          tag: card.slug,
 
-          child: ClipRRect(
-            /// Bordes redondeados de la carta
-            borderRadius: BorderRadius.circular(12),
+          /// [InkWell] dentro de [Hero] requiere un [Material] ancestro
+          /// para renderizar el efecto ripple correctamente durante
+          /// la animación. El [Material] transparente está en [_CardDetailDialog].
+          child: InkWell(
+            onTap: () => CustomShowCardDialog.show(context, card),
 
-            child: Stack(
-              // Ocupa todo el espacio disponible del grid cell
-              fit: StackFit.expand,
-              children: [
-                /// IMAGEN DE LA CARTA
-                /// Incluye fade-in y placeholder interno
-                CardImage(card: card),
+            child: ClipRRect(
+              /// Bordes redondeados de la carta.
+              /// Se usa 12 en el grid y 20 en el dialog intencionalmente:
+              /// el dialog es más grande y visualmente necesita un radio mayor.
+              borderRadius: BorderRadius.circular(12),
 
-                /// OVERLAY CON GRADIENTE Y NOMBRE
-                /// Mejora la legibilidad del texto sobre la imagen
-                CardNameOverlay(name: card.name),
-              ],
+              child: Stack(
+                /// Expande imagen y overlay para ocupar toda la celda del grid
+                fit: StackFit.expand,
+                children: [
+                  /// Imagen de la carta con caché, fade-in y shimmer interno
+                  CardImage(card: card),
+
+                  /// Gradiente con el nombre de la carta superpuesto
+                  CardNameOverlay(name: card.name),
+                ],
+              ),
             ),
           ),
         );
@@ -105,14 +117,14 @@ class CustomGridviewSkeleton extends StatelessWidget {
 /// Tarjeta skeleton individual con animación shimmer.
 ///
 /// Replica la forma y proporciones de una carta real,
-/// incluyendo los bordes redondeados del [CustomGridview].
+/// incluyendo los bordes redondeados de [CustomGridview].
 class _CardSkeleton extends StatelessWidget {
   const _CardSkeleton();
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      /// Mismo borderRadius que las cartas reales
+      /// Mismo borderRadius que las cartas reales en el grid
       borderRadius: BorderRadius.circular(12),
 
       child: Shimmer.fromColors(

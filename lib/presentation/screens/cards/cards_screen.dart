@@ -69,7 +69,9 @@ class CardsScreen extends ConsumerWidget {
                           color: Colors.grey,
                         ),
                         SizedBox(height: 12),
-                        Text('No se encontraron cartas'),
+                        Text(
+                          'No se encontraron cartas, revisa tu conexión o intenta en otro momento',
+                        ),
                       ],
                     ),
                   );

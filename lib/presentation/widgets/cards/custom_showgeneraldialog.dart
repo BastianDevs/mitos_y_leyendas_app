@@ -3,29 +3,43 @@ import 'package:flutter/material.dart';
 import 'package:mitos_y_leyendas_app/domain/entities/card.dart';
 import 'package:mitos_y_leyendas_app/presentation/widgets/widgets.dart';
 
+/// Clase utilitaria que expone el dialog de detalle de carta.
+///
+/// Se implementa como clase con método estático para poder llamarse
+/// desde cualquier widget sin necesidad de instanciarla:
+/// `CustomShowCardDialog.show(context, card)`
 class CustomShowCardDialog {
-  /// Método estático para mostrar el dialog de detalle de carta
-  /// Se llama desde cualquier parte sin instanciar la clase
+  /// Muestra el dialog de detalle de la carta seleccionada.
+  ///
+  /// Usa [showGeneralDialog] en lugar de [showDialog] para tener
+  /// control total sobre la animación de entrada, el blur del fondo
+  /// y la integración con la animación Hero desde el grid.
+  ///
+  /// [context] contexto de navegación actual.
+  /// [card] entidad de la carta cuyo detalle se mostrará.
   static void show(BuildContext context, CardEntity card) {
     showGeneralDialog(
       context: context,
 
-      /// Permite cerrar el dialog tocando fuera de él
+      /// Permite cerrar el dialog tocando fuera del contenido.
+      /// Al combinarse con Hero, también dispara la animación de retorno.
       barrierDismissible: true,
 
-      /// Etiqueta semántica del fondo (accesibilidad)
-      /// Útil para lectores de pantalla
+      /// Etiqueta requerida cuando [barrierDismissible] es true.
+      /// También es usada por lectores de pantalla para accesibilidad.
       barrierLabel: 'card-detail',
 
-      /// Color del fondo que cubre la pantalla detrás del dialog
-      /// Se usa un negro semitransparente para oscurecer el contenido
+      /// Fondo semitransparente que oscurece la pantalla detrás del dialog.
+      /// El blur adicional se aplica dentro del dialog con [BackdropFilter].
       barrierColor: Colors.black.withValues(alpha: 0.3),
 
-      /// Duración de la animación de entrada y salida del dialog
+      /// Duración de la animación de entrada y salida del dialog.
+      /// Debe coincidir con la duración del Hero para una transición coherente.
       transitionDuration: const Duration(milliseconds: 300),
 
-      /// Widget que se renderiza como contenido del dialog
-      /// Recibe las animaciones (no usadas aquí, pero disponibles)
+      /// Construye el contenido del dialog.
+      /// Los parámetros de animación están disponibles pero no se usan aquí
+      /// porque la animación se delega completamente al Hero interno.
       pageBuilder: (_, __, ___) {
         return _CardDetailDialog(card: card);
       },
@@ -34,10 +48,12 @@ class CustomShowCardDialog {
 }
 
 /// Dialog que muestra el detalle de una carta seleccionada.
-/// Se presenta como un overlay con fondo difuminado (blur),
-/// animación Hero desde la grilla y contenido centrado.
+///
+/// Estructura visual:
+/// - Fondo con efecto blur capturado del contenido detrás del dialog
+/// - Animación Hero que conecta la carta del grid con este dialog
+/// - Contenedor centrado con imagen, nombre y botón de cierre
 class _CardDetailDialog extends StatelessWidget {
-  /// Carta seleccionada que se mostrará en el dialog
   final CardEntity card;
 
   const _CardDetailDialog({required this.card});
@@ -45,45 +61,49 @@ class _CardDetailDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Scaffold transparente para permitir ver el blur del fondo
+      /// Transparente para que el [BackdropFilter] pueda capturar
+      /// y difuminar el contenido que hay detrás del dialog.
       backgroundColor: Colors.transparent,
 
       body: Stack(
         children: [
-          /// FONDO DIFUMINADO (BLUR)
-          /// Captura lo que hay detrás del dialog y le aplica desenfoque
+          /// FONDO DIFUMINADO
+          ///
+          /// [BackdropFilter] captura los píxeles detrás del widget
+          /// y les aplica un desenfoque gaussiano.
+          /// El [Container] hijo agrega una capa oscura para mejorar
+          /// el contraste del contenido de la carta sobre el fondo.
           BackdropFilter(
-            // Intensidad del blur en los ejes X e Y
             filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-
-            // Capa oscura semitransparente para mejorar contraste
             child: Container(color: Colors.black.withValues(alpha: 0.2)),
           ),
 
-          /// CONTENIDO PRINCIPAL DE LA CARTA
+          /// CONTENIDO PRINCIPAL
+          ///
+          /// [Hero] conecta esta vista con la carta de origen en el grid.
+          /// El tag debe ser idéntico al usado en [CustomGridview]
+          /// para que Flutter identifique el par origen-destino.
           Center(
             child: Hero(
-              /// Tag único que conecta la animación Hero
-              /// con la imagen de la carta en la grilla
               tag: card.slug,
 
-              /// Personaliza la animación Hero
-              /// En este caso, se usa un fade suave
+              /// Personaliza la apariencia de la carta durante el vuelo Hero.
+              /// Se usa un [FadeTransition] para que la carta aparezca
+              /// gradualmente mientras se desplaza desde el grid al centro.
+              /// Sin esto, Flutter usaría una interpolación visual abrupta.
               flightShuttleBuilder: (context, animation, _, __, toHeroContext) {
                 return FadeTransition(
-                  // La opacidad sigue la animación Hero
                   opacity: animation,
-
-                  // Widget destino de la animación
                   child: toHeroContext.widget,
                 );
               },
 
-              /// Material transparente requerido para Hero + Ink + sombras
+              /// [Material] transparente es necesario cuando el Hero
+              /// contiene widgets que usan Ink (como InkWell o botones),
+              /// para que las sombras y efectos de tinta se rendericen
+              /// correctamente durante la animación.
               child: Material(
                 color: Colors.transparent,
-
-                /// Contenedor visual de la carta (imagen + detalles)
                 child: _CardContainer(card: card),
               ),
             ),
@@ -94,10 +114,12 @@ class _CardDetailDialog extends StatelessWidget {
   }
 }
 
-/// Contenedor visual principal del detalle de la carta.
-/// Incluye la imagen, el nombre y el botón de cierre superpuesto.
+/// Contenedor visual del detalle de la carta.
+///
+/// Compuesto por tres capas en un [Stack]:
+/// - El contenedor principal con imagen y nombre
+/// - Un botón de cierre posicionado en la esquina superior derecha
 class _CardContainer extends StatelessWidget {
-  /// Carta que se mostrará en el dialog
   final CardEntity card;
 
   const _CardContainer({required this.card});
@@ -106,45 +128,45 @@ class _CardContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        /// CONTENIDO PRINCIPAL DE LA CARTA
-        /// (imagen + detalles)
+        /// TARJETA PRINCIPAL
         Container(
-          /// Ancho relativo a la pantalla para verse bien en cualquier dispositivo
+          /// Ancho relativo al 85% de la pantalla para adaptarse
+          /// a cualquier tamaño de dispositivo sin desbordar.
           width: MediaQuery.of(context).size.width * 0.85,
 
-          /// Estilos visuales del contenedor
           decoration: BoxDecoration(
-            // Color de fondo según el theme actual (light / dark)
+            /// Color de fondo tomado del theme activo.
+            /// Se adapta automáticamente a modo claro y oscuro.
             color: Theme.of(context).colorScheme.surface,
-
-            // Bordes redondeados tipo "card"
             borderRadius: BorderRadius.circular(20),
           ),
 
           child: Column(
-            // Ajusta la altura al contenido
             mainAxisSize: MainAxisSize.min,
             children: [
               /// IMAGEN DE LA CARTA
-              /// Se recorta solo en la parte superior
+              ///
+              /// [ClipRRect] recorta solo las esquinas superiores
+              /// para que coincidan con el borde del contenedor.
+              /// [AspectRatio] fija las proporciones en 0.7 (mismo valor
+              /// que [CustomGridview]) para que la animación Hero no
+              /// deforme la imagen durante el vuelo entre pantallas.
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(20),
                 ),
-                child: CardImage(card: card),
+                child: AspectRatio(
+                  aspectRatio: 0.7,
+                  child: CardImage(card: card),
+                ),
               ),
 
-              /// DETALLES DE LA CARTA
+              /// NOMBRE DE LA CARTA
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  // Se muestra el nombre en mayúsculas
                   card.name.toUpperCase(),
-
-                  // Estilo tipográfico del theme
                   style: Theme.of(context).textTheme.titleLarge,
-
-                  // Texto centrado horizontalmente
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -153,26 +175,25 @@ class _CardContainer extends StatelessWidget {
         ),
 
         /// BOTÓN DE CIERRE
-        /// Se posiciona por encima del contenedor principal
+        ///
+        /// [Positioned] lo ubica en la esquina superior derecha,
+        /// ligeramente fuera del borde del contenedor para un
+        /// efecto visual flotante sobre la carta.
         Positioned(
-          // Se desplaza levemente hacia afuera del borde
           top: -3,
           right: -3,
 
           child: IconButton(
-            // Ícono de cierre
             icon: const Icon(Icons.close),
-
-            // Color del ícono
             color: Colors.white,
-
-            // Estilo visual del botón
             style: IconButton.styleFrom(
-              // Fondo semitransparente para contraste
+              /// Fondo semitransparente para que el ícono sea legible
+              /// independientemente del color de la imagen de la carta.
               backgroundColor: Colors.black.withValues(alpha: 0.4),
             ),
 
-            /// Cierra el dialog al presionar
+            /// [Navigator.pop] cierra el dialog y dispara la animación
+            /// Hero de retorno hacia la carta de origen en el grid.
             onPressed: () => Navigator.pop(context),
           ),
         ),
