@@ -8,8 +8,6 @@ class CustomShowCardDialog {
   /// Se llama desde cualquier parte sin instanciar la clase
   static void show(BuildContext context, CardEntity card) {
     showGeneralDialog(
-      /// Contexto de navegación actual
-      /// Necesario para insertar el dialog en el árbol de widgets
       context: context,
 
       /// Permite cerrar el dialog tocando fuera de él
