@@ -4,6 +4,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mitos_y_leyendas_app/config/router/app_router.dart';
 import 'package:mitos_y_leyendas_app/config/theme/app_theme.dart';
 
+/// Controla el modo de tema activo en toda la aplicación.
+///
+/// - [ThemeMode.system]: sigue la preferencia del sistema operativo
+/// - [ThemeMode.light]: fuerza el modo claro
+/// - [ThemeMode.dark]: fuerza el modo oscuro
+///
+/// Se declara global para ser accesible desde cualquier widget,
+/// incluido [CustomAppbar] donde vive el botón de cambio de tema.
+final themeModeProvider = NotifierProvider<ThemeModeNotifier, ThemeMode>(
+  ThemeModeNotifier.new,
+);
+
+/// Notifier que mantiene y expone el modo de tema activo.
+class ThemeModeNotifier extends Notifier<ThemeMode> {
+  @override
+  ThemeMode build() => ThemeMode.system;
+
+  /// Alterna entre modo claro y oscuro
+  void toggle(ThemeMode mode) => state = mode;
+}
+
 /// Punto de entrada principal de la aplicación.
 ///
 /// Responsabilidades:
@@ -29,16 +50,17 @@ void main() {
 /// Responsabilidades:
 /// - Configurar la navegación con GoRouter.
 /// - Definir el tema global.
+/// - Observar [themeModeProvider] para reaccionar al cambio de tema.
 /// - Controlar la eliminación del splash screen.
 /// - Deshabilitar el banner de debug.
-class MainApp extends StatefulWidget {
+class MainApp extends ConsumerStatefulWidget {
   const MainApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  ConsumerState<MainApp> createState() => _MainAppState();
 }
 
-class _MainAppState extends State<MainApp> {
+class _MainAppState extends ConsumerState<MainApp> {
   @override
   void initState() {
     super.initState();
@@ -66,6 +88,8 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    /// Este widget se reconstruye y aplica el nuevo tema globalmente.
+    final themeMode = ref.watch(themeModeProvider);
     return MaterialApp.router(
       /// Oculta la etiqueta "DEBUG" en modo desarrollo.
       debugShowCheckedModeBanner: false,
@@ -73,8 +97,14 @@ class _MainAppState extends State<MainApp> {
       /// Configuración de rutas usando GoRouter.
       routerConfig: appRouter,
 
-      /// Tema global de la aplicación.
+      /// Tema global de la aplicación. (Tema Claro)
       theme: AppTheme().getTheme(),
+
+      /// Tema oscuro — misma semilla de color, paleta adaptada por Flutter
+      darkTheme: AppTheme().getDarkTheme(),
+
+      /// Modo activo controlado por [themeModeProvider]
+      themeMode: themeMode,
     );
   }
 }

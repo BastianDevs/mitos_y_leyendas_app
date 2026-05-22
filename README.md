@@ -171,11 +171,9 @@ Los providers de cartas usan `ref.keepAlive()`, lo que evita que Riverpod destru
 - [x] Caché de imágenes con `cached_network_image`
 - [x] Caché HTTP de respuestas con `dio_cache_interceptor`
 - [x] Providers persistentes con `ref.keepAlive()`
-
-### 🚧 En progreso
-
-- [ ] Manejo de estados de error y empty states
-- [ ] Animaciones Hero mejoradas
+- [x] Manejo de estados de error y empty states en grid y buscador
+- [x] Skeleton loaders con shimmer en grid y sugerencias de búsqueda
+- [x] Animaciones Hero entre grid y dialog de detalle
 
 ### 🔜 Planificado
 
