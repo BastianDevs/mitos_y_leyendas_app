@@ -174,6 +174,7 @@ Los providers de cartas usan `ref.keepAlive()`, lo que evita que Riverpod destru
 - [x] Manejo de estados de error y empty states en grid y buscador
 - [x] Skeleton loaders con shimmer en grid y sugerencias de búsqueda
 - [x] Animaciones Hero entre grid y dialog de detalle
+- [x] Modo oscuro completo
 
 ### 🔜 Planificado
 
@@ -181,7 +182,6 @@ Los providers de cartas usan `ref.keepAlive()`, lo que evita que Riverpod destru
 - [ ] Filtros avanzados (tipo, coste, rareza)
 - [ ] Caché local persistente para modo offline (Isar)
 - [ ] Tests unitarios de providers
-- [ ] Modo oscuro completo
 
 ---
 
